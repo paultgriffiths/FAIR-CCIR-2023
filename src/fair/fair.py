@@ -826,28 +826,32 @@ class FAIR:
         for specie in species_to_rcmip_copy:
             if specie not in self.species:
                 del species_to_rcmip[specie]
+        download_rcmip=False        
+        if download_rcmip==True:
+            rcmip_emissions_file = pooch.retrieve(
+                url="doi:10.5281/zenodo.4589756/rcmip-emissions-annual-means-v5-1-0.csv",
+                known_hash="md5:4044106f55ca65b094670e7577eaf9b3",
+            )
 
-        rcmip_emissions_file = pooch.retrieve(
-            url="doi:10.5281/zenodo.4589756/rcmip-emissions-annual-means-v5-1-0.csv",
-            known_hash="md5:4044106f55ca65b094670e7577eaf9b3",
-        )
+            rcmip_concentration_file = pooch.retrieve(
+                url=(
+                    "doi:10.5281/zenodo.4589756/"
+                    "rcmip-concentrations-annual-means-v5-1-0.csv"
+                ),
+                known_hash="md5:0d82c3c3cdd4dd632b2bb9449a5c315f",
+            )
 
-        rcmip_concentration_file = pooch.retrieve(
-            url=(
-                "doi:10.5281/zenodo.4589756/"
-                "rcmip-concentrations-annual-means-v5-1-0.csv"
-            ),
-            known_hash="md5:0d82c3c3cdd4dd632b2bb9449a5c315f",
-        )
-
-        rcmip_forcing_file = pooch.retrieve(
-            url=(
-                "doi:10.5281/zenodo.4589756/"
-                "rcmip-radiative-forcing-annual-means-v5-1-0.csv"
-            ),
-            known_hash="md5:87ef6cd4e12ae0b331f516ea7f82ccba",
-        )
-
+            rcmip_forcing_file = pooch.retrieve(
+                url=(
+                    "doi:10.5281/zenodo.4589756/"
+                    "rcmip-radiative-forcing-annual-means-v5-1-0.csv"
+                ),
+                known_hash="md5:87ef6cd4e12ae0b331f516ea7f82ccba",
+            )
+        else:
+            rcmip_emissions_file='../rcmip_data/rcmip-emissions-annual-means-v5-1-0.csv'
+            rcmip_concentration_file='../rcmip_data/rcmip-concentrations-annual-means-v5-1-0.csv'
+            rcmip_forcing_file='../rcmip_data/rcmip-radiative-forcing-annual-means-v5-1-0.csv'
         df_emis = pd.read_csv(rcmip_emissions_file)
         df_conc = pd.read_csv(rcmip_concentration_file)
         df_forc = pd.read_csv(rcmip_forcing_file)
